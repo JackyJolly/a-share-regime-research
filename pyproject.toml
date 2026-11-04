@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling>=1.26,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "a-share-regime-research"
+version = "0.1.0"
+description = "Point-in-time market regime research with Ricequant daily data"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26,<3", "pandas>=2.2,<3", "scipy>=1.12,<2",
+  "scikit-learn>=1.5,<2", "PyYAML>=6,<7", "matplotlib>=3.8,<4",
+]
+
+[project.optional-dependencies]
+ricequant = ["rqdatac>=3,<4"]
+hmm = ["hmmlearn>=0.3.3,<0.4"]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+regime-research = "regime_research.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/regime_research"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

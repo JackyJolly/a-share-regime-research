@@ -1,0 +1,28 @@
+# Paper-aligned proxy specification. Real licensed industry IDs must be filled in.
+data:
+  order_book_id: 000985.XSHG
+  start_date: '2010-01-01'
+  end_date: '2026-11-04'
+  industry_ids: []
+  industry_classification: unspecified
+  small_cap_id: 000905.XSHG
+  large_cap_id: 000300.XSHG
+model:
+  n_states: 4
+  # Approx. 2010-2015 initial training + one-year feature warmup when data starts 2010.
+  min_train_size: 1200
+  train_window: 1200
+  refit_every: 21
+  covariance_type: diag
+  n_init: 5
+  max_iter: 500
+  reg_covar: 0.001
+  random_state: 42
+  clip_quantile: 0.01
+  model_type: gmm
+  scaler: mad
+  min_component_weight: 0.01
+evaluation:
+  horizons: [5, 20, 60]
+  transaction_cost_bps: 10.0
+  periods_per_year: 252

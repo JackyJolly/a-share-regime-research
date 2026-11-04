@@ -1,0 +1,23 @@
+# Integration test, NOT a preregistered empirical specification.
+data:
+  order_book_id: SYNTH_MARKET
+  start_date: '2010-01-01'
+  end_date: '2030-01-01'
+model:
+  n_states: 4
+  min_train_size: 252
+  train_window: 504
+  refit_every: 63
+  covariance_type: diag
+  n_init: 2
+  max_iter: 500
+  reg_covar: 0.001
+  random_state: 42
+  clip_quantile: 0.01
+  model_type: gmm
+  scaler: mad
+  min_component_weight: 0.01
+evaluation:
+  horizons: [5, 20, 60]
+  transaction_cost_bps: 10.0
+  periods_per_year: 252

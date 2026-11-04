@@ -1,0 +1,22 @@
+name: Research validation
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.13.4'
+      - run: uv sync --frozen --extra dev --extra ricequant --extra hmm --python 3.12
+      - run: uv run --frozen --all-extras pytest
+      - run: uv run --frozen --all-extras regime-research synthetic --output data/ci --periods 1000
+      - run: uv run --frozen --all-extras regime-research run --data data/ci --output outputs/ci --profile paper
+      - uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-research-smoke
+          path: outputs/ci/
