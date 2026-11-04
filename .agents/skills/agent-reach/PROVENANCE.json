@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/Panniantong/Agent-Reach",
+  "commit": "c62128afe64c9bb624360d683db6036502535a3a",
+  "version": "1.6.1",
+  "upstream_skill_sha256": "86f6bd3d377f30ec553e8fdac801fc41fe3eda3e0a9a2aa7690d5adb30e8ad7e",
+  "adaptations": [
+    "Project-specific installation and consent constraints",
+    "Resolved version placeholder",
+    "Channel template replaced with capability reference"
+  ],
+  "files": {
+    "LICENSE": "e94c131ac1c2f78cfd8f7e69da354c0ff58e4e54071697703d56856c036de402",
+    "SKILL.md": "4af07b6f0299e3ade7eaac191250a0fdc886ef71986e763c23b3f04a41052e02",
+    "references/capabilities.md": "36105d4686493e67eb2f6d7cb47479e06bef6fbfe7159f08d3a6b64314b1cd79",
+    "references/maintenance.md": "316585c8837f3e12fd88cb1769cf9b00eed9c83c2fc70f46a6dcb791012121e1",
+    "references/sessions.md": "2b15b340db21838680659b4694a419f6799036e49ddb4b8042e7b893a4dbadd3"
+  }
+}
