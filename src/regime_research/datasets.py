@@ -63,23 +63,8 @@ def synthetic_bundle(directory, periods=1800, seed=42):
 
 
 def init_ricequant():
-    try:
-        import rqdatac
-    except ImportError:
-        raise RuntimeError("Install .[ricequant] in an isolated environment") from None
-    username, password = os.getenv("RQDATAC_USERNAME"), os.getenv("RQDATAC_PASSWORD")
-    has_uri = bool(os.getenv("RQDATAC_CONF") or os.getenv("RQDATAC2_CONF"))
-    if not (username and password) and not has_uri:
-        raise RuntimeError("Set RQDATAC_USERNAME and RQDATAC_PASSWORD securely; no values in chat or Git")
-    try:
-        # Preserve SDK-native authentication and transport configuration if present.
-        if username and password:
-            rqdatac.init(username, password, auto_load_plugins=False)
-        else:
-            rqdatac.init(auto_load_plugins=False)
-    except Exception:
-        raise RuntimeError("Ricequant init failed; check entitlement, credentials and SDK transport") from None
-    return rqdatac
+    from .auth import initialize
+    return initialize()
 
 
 def ricequant_bundle(directory, cfg, with_panels=False, client=None):

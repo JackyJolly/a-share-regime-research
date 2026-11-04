@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-ricequant = ["rqdatac>=3,<4"]
+ricequant = ["rqdatac[proxy]>=3,<4"]
 hmm = ["hmmlearn>=0.3.3,<0.4"]
 dev = ["pytest>=8,<10"]
 

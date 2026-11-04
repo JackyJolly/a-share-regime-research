@@ -45,7 +45,7 @@ uv run --frozen pytest
 
 ## 米筐真实数据
 
-先在安全环境设置RQDATAC_USERNAME／RQDATAC_PASSWORD，或使用SDK原生RQDATAC_CONF／RQDATAC2_CONF。不要将值放进对话、YAML、Git或命令历史。
+licence认证优先在安全的环境设置中填写RQDATAC_LICENSE_KEY；代码使用官方的 `rqdatac.init("license", key)`。也支持RQDATAC_USERNAME／RQDATAC_PASSWORD或SDK原生RQDATAC_CONF／RQDATAC2_CONF。不要将值放进对话、YAML、Git或命令历史；不要运行会打印licence的SDK `info()`。
 
 ```bash
 # 先验证账号、行情字段与交易日。
@@ -65,6 +65,8 @@ uv run --frozen regime-research run --config configs/paper.yaml \
 ```
 
 RQData SDK 3.8.1默认连接rqdatad-pro.ricequant.com:16011，使用专用TCP协议。**允许HTTPS域名不等于允许这条TCP连接。** 云端需要平台支持相应目的地或认可的SDK代理；本项目不绕过网络策略。真实账号、行业权限及TCP可达性尚未验证。
+
+在当前托管环境，程序先检查TCP授权，再使用平台声明的CONNECT代理；没有授权时在发送凭据前停止。2026-11-04检查发现TCP允许列表为空，声明的CONNECT代理连接被拒绝；因此尚未验证licence有效性，也未下载真实数据。环境草稿已登记RQDATAC_LICENSE_KEY需求，但未填入或保存密钥值。
 
 ## 目录
 
