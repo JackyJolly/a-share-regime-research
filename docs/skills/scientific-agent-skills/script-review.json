@@ -1,0 +1,5 @@
+{
+  "scope": "Static AST pattern scan; no scripts executed; not a security audit",
+  "parse_errors": [],
+  "sensitive_calls": []
+}
