@@ -12,7 +12,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           version: '0.13.4'
-      - run: uv sync --frozen --extra dev --extra ricequant --extra hmm --python 3.12
+      - run: uv sync --frozen --all-extras --python 3.12
       - run: uv run --frozen --all-extras pytest
       - run: uv run --frozen --all-extras regime-research synthetic --output data/ci --periods 1000
       - run: uv run --frozen --all-extras regime-research run --data data/ci --output outputs/ci --profile paper
@@ -20,3 +20,21 @@ jobs:
         with:
           name: synthetic-research-smoke
           path: outputs/ci/
+  windows-offline:
+    runs-on: windows-latest
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - run: 'python -m pip install --only-binary=:all: -r requirements.txt'
+      - run: python -m pip install --no-deps -e .
+      - run: python -m pip check
+      - run: python -m pytest
+      - run: python scripts/download_sample.py --help

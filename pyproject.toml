@@ -14,6 +14,7 @@ dependencies = [
 
 [project.optional-dependencies]
 ricequant = ["rqdatac[proxy]>=3,<4"]
+parquet = ["pyarrow>=18,<25"]
 hmm = ["hmmlearn>=0.3.3,<0.4"]
 dev = ["pytest>=8,<10"]
 

@@ -15,7 +15,7 @@ def write_json(path, value):
         if isinstance(obj, (pd.Timestamp, Path)):
             return str(obj)
         raise TypeError(type(obj).__name__)
-    Path(path).write_text(json.dumps(value, default=convert, ensure_ascii=False, indent=2, allow_nan=False)+"\n")
+    Path(path).write_text(json.dumps(value, default=convert, ensure_ascii=False, indent=2, allow_nan=False)+"\n", encoding="utf-8")
 
 
 def run_manifest(config, data_manifest, profile, feature_names):
@@ -25,7 +25,7 @@ def run_manifest(config, data_manifest, profile, feature_names):
     except (OSError, subprocess.CalledProcessError):
         commit, dirty = "unknown", None
     packages = {}
-    for name in ["numpy", "pandas", "scipy", "scikit-learn", "rqdatac", "hmmlearn"]:
+    for name in ["numpy", "pandas", "scipy", "scikit-learn", "rqdatac", "hmmlearn", "pyarrow"]:
         try:
             packages[name] = importlib.metadata.version(name)
         except importlib.metadata.PackageNotFoundError:
@@ -79,7 +79,8 @@ def markdown_report(directory, result, manifest, metrics):
     p = result.predictions
     synthetic = manifest["dataset"].get("is_synthetic", False)
     lines = ["# A股市场状态研究运行报告", "",
-             "**模拟数据验收，不能作为A股实证证据。**" if synthetic else "真实数据运行；结论仍需独立验证与稳健性检验。", "",
+             "**模拟数据验收，不能作为A股实证证据。**" if synthetic else
+             "数据清单标记为非模拟数据；来源真实性未由框架独立认证，研究结论仍需验证。", "",
              f"- 配置：{manifest['profile']} / {manifest['config']['model']['model_type']}",
              f"- 样本外预测：{len(p)} 个交易日，{p.index[0].date()} 至 {p.index[-1].date()}",
              f"- 模型重估：{len(result.fits)} 次；每次训练截至预测日前一交易日。",

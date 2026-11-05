@@ -11,26 +11,26 @@ from .evaluation import forward_outcomes, state_statistics, transition_statistic
 from .similarity import historical_analogs
 from .reporting import run_manifest, write_json, charts, markdown_report
 from .inference import incremental_regressions
+from .storage import resolve_table, read_table
 
 
 def run_research(data_dir, output_dir, cfg: ResearchConfig, profile="core", with_charts=True):
     data_dir = Path(data_dir)
     source = verify_manifest(data_dir)
-    prices = read_prices(data_dir/"prices.csv")
+    prices = read_prices(resolve_table(data_dir, source, "prices"))
     # Honor configured sample bounds even for imported CSVs or synthetic fixtures.
     prices = prices.loc[cfg.data.start_date:cfg.data.end_date]
     if prices.empty:
         raise ValueError("No data in configured sample dates")
     if profile == "paper":
-        required = ["industry_panel.csv", "stock_panel.csv", "membership.csv", "styles.csv"]
-        if not all(name in source["sha256"] for name in required):
-            raise ValueError("Paper profile requires hashed industry, stock, membership and style panels")
+        paths = {name: resolve_table(data_dir, source, name)
+                 for name in ["industry_panel", "stock_panel", "membership", "styles"]}
         if not source.get("industry_classification") or source.get("industry_classification") == "unspecified":
             raise ValueError("Paper profile requires an explicit industry classification")
-        industries = pd.read_csv(data_dir/"industry_panel.csv")
-        stocks = pd.read_csv(data_dir/"stock_panel.csv")
-        membership = pd.read_csv(data_dir/"membership.csv")
-        styles = pd.read_csv(data_dir/"styles.csv", index_col="date", parse_dates=True)
+        industries = read_table(paths["industry_panel"])
+        stocks = read_table(paths["stock_panel"])
+        membership = read_table(paths["membership"])
+        styles = read_table(paths["styles"], date_index=True)
         features = combined_features(prices, industries, stocks, membership, styles)
     elif profile == "core":
         features = make_features(prices)

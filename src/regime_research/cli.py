@@ -17,6 +17,8 @@ def parser():
     fetch = sub.add_parser("fetch", help="Authenticated Ricequant data download (licensed account required)")
     fetch.add_argument("--config", default="configs/baseline.yaml")
     fetch.add_argument("--output", required=True)
+    fetch.add_argument("--format", choices=["csv", "parquet"], default="csv",
+                       help="Downloaded table format; Parquet requires pyarrow")
     fetch.add_argument("--with-panels", action="store_true", help="Historical daily constituents and configured sector indices; potentially large")
     run = sub.add_parser("run", help="Run chronological research and write reproducible artifacts")
     run.add_argument("--config", default="configs/baseline.yaml")
@@ -25,6 +27,8 @@ def parser():
     run.add_argument("--profile", choices=["core", "paper"], default="core")
     run.add_argument("--model", choices=["gmm", "hmm"])
     run.add_argument("--no-charts", action="store_true")
+    inspect = sub.add_parser("validate-data", help="Verify local CSV/Parquet hashes and OHLCV; no network or model fitting")
+    inspect.add_argument("--data", required=True)
     return p
 
 
@@ -37,12 +41,15 @@ def main(argv=None):
             cfg = ResearchConfig.load(args.config)
             # SDK failures may contain server/authentication details. Do not print them.
             try:
-                path = ricequant_bundle(args.output, cfg.data, args.with_panels)
+                path = ricequant_bundle(args.output, cfg.data, args.with_panels, output_format=args.format)
             except (ValueError, RuntimeError):
                 raise
             except Exception:
                 raise RuntimeError("Ricequant request failed; inspect account entitlement and network configuration securely") from None
             result = {"dataset": str(path), "source": "ricequant"}
+        elif args.command == "validate-data":
+            from .quality import inspect_dataset
+            result = inspect_dataset(args.data)
         else:
             cfg = ResearchConfig.load(args.config)
             if args.model:

@@ -1,0 +1,16 @@
+# Long-sample CSI 300 core research. The 60-session sample is only for data checks.
+data:
+  order_book_id: 000300.XSHG
+  start_date: '2010-01-01'
+  end_date: '2026-11-04'
+model:
+  n_states: 4
+  min_train_size: 504
+  train_window: 756
+  refit_every: 21
+  model_type: gmm
+  scaler: mad
+evaluation:
+  horizons: [5, 20, 60]
+  transaction_cost_bps: 10.0
+  periods_per_year: 252

@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 import numpy as np
 import pandas as pd
+from .storage import read_table
 
 FIELDS = ["open", "high", "low", "close", "volume", "total_turnover"]
 
@@ -31,7 +32,7 @@ def validate_prices(frame: pd.DataFrame) -> pd.DataFrame:
 
 
 def read_prices(path: Path) -> pd.DataFrame:
-    return validate_prices(pd.read_csv(path, index_col="date", parse_dates=True))
+    return validate_prices(read_table(path, date_index=True))
 
 
 def fetch_ricequant(order_book_id: str, start_date: str, end_date: str, client=None) -> pd.DataFrame:

@@ -22,3 +22,14 @@ pytest有50条hmmlearn与NumPy2.5之间的数组shape弃用警告，不是失败
 - 供应商历史数据修订时点、实际行业市值贡献和真实可成交收益。
 - GitHub Actions远端运行结果、不同操作系统和新云任务恢复。
 - 正式论文的真实A股统计与策略有效性；模拟结果均不能作为证据。
+
+## 2026-11-05：本机下载、Parquet/CSV与Windows部署
+
+- Python 3.12.14 下61项离线pytest测试通过（14.73秒）；既有50条hmmlearn弃用警告保留，无失败。
+- 覆盖CSV/Parquet完整研究流程等价、来源标记、哈希与路径校验、失败下载隔离、报告篡改、SDK输出脱敏、真实接口契约的假SDK测试。
+- 60交易日样本测试使用明确的假SDK日历，验证节假日差异、异常日历/行情拒绝发布、研究加载入口和零可用训练特征行；测试数据不用于实证结论。
+- 静态核对已安装rqdatac 3.8.1的init/get_price/get_trading_dates/index_components签名与返回结构；没有连接真实米筐服务。
+- 从uv.lock导出requirements.txt；Windows x64/Python 3.12对应35项依赖在锁文件中均有兼容wheel记录。
+- uv lock --check --offline、uv pip check、命令行help、YAML配置解析、git diff --check均通过。
+- 元数据和报告统一UTF-8；提供Windows PowerShell说明及Windows离线CI任务。尚未在Windows实机运行，远端CI状态未在本记录中认定通过。
+- 云端密钥变量存在，TCP授权为空且代理连接被拒绝；认证未尝试，停止网络重试。真实60行Parquet与质量报告须在用户本机下载成功后产生，本次没有这些真实产物。
